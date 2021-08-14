@@ -25,4 +25,7 @@ Compatibility:
 TODO:
 	- Syntax highlighting.
 	- Jump to line.
-	- Handle other keypresses so it doesn't print stuff like '<19a>'. 
+	- Handle other keypresses so it doesn't print stuff like '<19a>' when in Insert mode.
+	- Word-by-word horizontal navigation.
+	- Redo/Undo.
+	- Search

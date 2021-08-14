@@ -72,7 +72,7 @@ class IlludGUI(object):
         for char in text:
             i = ord(char)
             if(char == '\t'):
-                res.append('>')
+                res.append('>   ')
             elif(i < 32 or i > 126):
             	res.append('<{}>'.format(hex(i)[2:]))
             else:
