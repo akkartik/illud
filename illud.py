@@ -273,3 +273,25 @@ class IlludGUI(object):
                 numCols += 1
             self.col = min(numCols - 1, max(0, self.col))
 
+@contextmanager
+def useCurses():
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
+    try:
+        yield stdscr
+    finally:
+        curses.nocbreak()
+        stdscr.keypad(0)
+        curses.echo()
+        curses.endwin()
+
+def cursesMain():
+    if(len(argv) > 1):
+        filename = argv[1]
+    else:
+        filename = None
+
+    with useCurses() as stdscr:
+        gui = IlludGUI(stdscr, filename)
+        gui.main()
