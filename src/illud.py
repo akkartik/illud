@@ -72,7 +72,7 @@ class IlludGUI(object):
         for char in text:
             i = ord(char)
             if(char == '\t'):
-                res.append('>  ')
+                res.append('>')
             elif(i < 32 or i > 126):
                 res.append('<{}>'.format(hex(i)[2:]))
             else:
@@ -187,6 +187,11 @@ class IlludGUI(object):
         self.screen.refresh()
 
     def handleNavigationMode(self, char):
+	"""
+	Unfortunately, this python version still does not have
+	switch/case support, so I have to use all those elif's...
+	"""
+
         if(char == ord('q')): # quit
             self.exitEditor = True
         elif(char == ord('k')): # down
@@ -228,7 +233,7 @@ class IlludGUI(object):
             if(self.mode == 'Insert'):
                 self.col -= 1
             self.mode = "Navigation"
-        elif(char == 127): # Backspace
+        elif(char == 127 or char == 8 or char == 51): # Backspace
             if(self.col == 0 and self.row == 0):
                 pass
             
