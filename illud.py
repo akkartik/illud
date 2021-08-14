@@ -11,13 +11,13 @@ class Buffer(object):
         return list(self.lines)
 
     def checkPoint(self, row, col):
-        if(row < 0 or row > len(self.lines) - 1):
-            print("Row exceeded the limit: '{}'".format(row))
+        #if(row < 0 or row > len(self.lines) - 1):
+        #    print("Row exceeded the limit: '{}'".format(row))
 
         currentRow = self.lines[row]
         
-        if(col < 0 or col > len(currentRow)):
-            print("Column exceeded the limit: '{}'".format(col))
+        #if(col < 0 or col > len(currentRow)):
+        #   print("Column exceeded the limit: '{}'".format(col))
 
     def setText(self, row1, col1, row2, col2, text):
         self.checkPoint(row1, col1)
@@ -84,7 +84,7 @@ class IlludGUI(object):
             if(text == ''):
                 yield ''
             else:
-                for i in xrange(0, len(text), width):
+                for i in range(0, len(text), width):
                     yield text[i:i + width]
 
         assert lineNum >= 0, 'lineNum must be greater than 0.'
@@ -135,7 +135,7 @@ class IlludGUI(object):
         highestLineNum = len(self.buf.getLines())
         gutterWidth = max(3, len(str(highestLineNum))) + 1
         lineWidth = width - gutterWidth
-        cursorY, cursorX = None, None
+        cursorY, cursorX = 0, 0
 
         self.scrollTo(self.row, lineWidth, height)
 
@@ -159,7 +159,7 @@ class IlludGUI(object):
                 realCol = len(self.convertNonPrinting(
                     ''.join(lines)[:self.col])
                 )
-                cursorY = curY + realCol / lineWidth
+                cursorY = currentY + realCol / lineWidth
                 cursorX = left + gutterWidth + realCol % lineWidth
                 
             for n, wrappedLine in enumerate(wrappedLines):
@@ -176,7 +176,7 @@ class IlludGUI(object):
             self.screen.addstr(currentY, left, gutter)
 
         assert cursorX != None and cursorY != None
-        self.screen.move(cursorY + 0, cursorX + 0)
+        self.screen.move(int(cursorY) + 0, int(cursorX) + 0)
 
     def draw(self):
         self.screen.erase()
@@ -205,7 +205,7 @@ class IlludGUI(object):
         elif(char == ord('x')): # delete a character
             self.buf.setText(self.row, self.col, self.row,
                                 self.col + 1, '')
-        elif(char == ord('i')): # enter insert mode
+        elif(char == ord('f')): # enter insert mode
             self.mode = "Insert"
         elif(char == ord('a')): # enter insert mode after cursor
             self.mode = "Insert"
@@ -234,7 +234,7 @@ class IlludGUI(object):
             
             elif(self.col == 0):
                 prevLine = self.buf.getLines()[self.row - 1]
-                cur_line = self.buf.getLines()[self.row]
+                curLine = self.buf.getLines()[self.row]
                 self.buf.setText(self.row - 1, 0, self.row,
                                     len(curLine), prevLine + curLine)
                 self.col = len(prevLine)
@@ -244,8 +244,6 @@ class IlludGUI(object):
                                     self.col, '')
                 self.col -= 1
         else:
-            self.message = ('inserted {} at row {} col {}'
-                             .format(char, self.row, self.col))
             self.buf.setText(self.row, self.col, self.row,
                                 self.col, chr(char))
             if(chr(char) == '\n'):
@@ -263,7 +261,7 @@ class IlludGUI(object):
             if(self.mode == 'Normal'):
                 self.handleNormalMode(char)
             elif(self.mode == 'Insert'):
-                self.insertMode(char)
+                self.handleInsertMode(char)
 
             numLines = len(self.buf.getLines())
             self.row = min(numLines - 1, max(0, self.row))
@@ -295,3 +293,5 @@ def cursesMain():
     with useCurses() as stdscr:
         gui = IlludGUI(stdscr, filename)
         gui.main()
+
+cursesMain()
