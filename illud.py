@@ -187,31 +187,31 @@ class IlludGUI(object):
         self.screen.refresh()
 
     def handleNormalMode(self, char):
-        if char == ord('q'): # quit
+        if(char == ord('q')): # quit
             self.exitEditor = True
-        elif char == ord('k'): # down
+        elif(char == ord('k')): # down
             self.row += 1
-        elif char == ord('i'): # up
+        elif(char == ord('i')): # up
             self.row -= 1
-        elif char == ord('j'): # left
+        elif(char == ord('j')): # left
             self.col -= 1
-        elif char == ord('l'): # right
+        elif(char == ord('l')): # right
             self.col += 1
-        elif char == ord('s'): # move to beginning of line
+        elif(char == ord('s')): # move to beginning of line
             self.col = 0
-        elif char == ord('e'): # move to end of line
+        elif(char == ord('e')): # move to end of line
             currentLineLen = len(self.buf.getLines()[self.row])
             self.col = currentLineLen - 1
-        elif char == ord('x'): # delete a character
+        elif(char == ord('x')): # delete a character
             self.buf.setText(self.row, self.col, self.row,
                                 self.col + 1, '')
-        elif char == ord('i'): # enter insert mode
+        elif(char == ord('i')): # enter insert mode
             self.mode = "Insert"
-        elif char == ord('a'): # enter insert mode after cursor
+        elif(char == ord('a')): # enter insert mode after cursor
             self.mode = "Insert"
             self.col += 1
-        elif char == ord('w'): # write file
-            if self.fileName == None:
+        elif(char == ord('w')): # write file
+            if(self.fileName == None):
                 self.message = "Can\'t write file without filename."
             else:
                 try:
@@ -222,3 +222,34 @@ class IlludGUI(object):
                                      .format(self.fileName, e))
         else:
             self.message = ''
+
+    def handleInsertMode(self, char):
+        if(char == 27): #ESC
+            if(self.mode == 'Insert'):
+                self.col -= 1
+            self.mode = "Normal"
+        elif(char == 127): # Backspace
+            if(self.col == 0 and self.row == 0):
+                pass
+            
+            elif(self.col == 0):
+                prevLine = self.buf.getLines()[self.row - 1]
+                cur_line = self.buf.getLines()[self.row]
+                self.buf.setText(self.row - 1, 0, self.row,
+                                    len(curLine), prevLine + curLine)
+                self.col = len(prevLine)
+                self.row -= 1
+            else:
+                self.buf.setText(self.row, self.col - 1, self.row,
+                                    self.col, '')
+                self.col -= 1
+        else:
+            self.message = ('inserted {} at row {} col {}'
+                             .format(char, self.row, self.col))
+            self.buf.setText(self.row, self.col, self.row,
+                                self.col, chr(char))
+            if(chr(char) == '\n'):
+                self.row += 1
+                self.col = 0
+            else:
+                self.col += 1
