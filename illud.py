@@ -44,3 +44,18 @@ class IlludGUI(object):
         self.message = 'Illud'
         self.exitEditor = False
 
+    def drawGutter(self, numStart, numRows, lastLineNum):
+        lineNums = range(numStart, numStart + numRows)
+
+        assert len(lineNums) == numRows
+
+        gutterWidth = max(3, len(str(lastLineNum))) + 1
+        
+        for y, lineNum in enumerate(lineNums):
+            if lineNum > lastLineNum:
+                text = '.'.ljust(gutterWidth)
+            else:
+                text = '{} '.format(lineNum).rjust(gutterWidth)
+            self.screen.addstr(y, 0, text, curses.A_REVERSE)
+        return gutterWidth
+
