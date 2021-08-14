@@ -56,7 +56,7 @@ class IlludGUI(object):
                 text = '.'.ljust(gutterWidth)
             else:
                 text = '{} '.format(lineNum).rjust(gutterWidth)
-            self.screen.addstr(y, 0, text, curses.A_REVERSE)
+            self.screen.addstr(y, 0, text, curses.A_BOLD)
         return gutterWidth
 
     def drawStatusLine(self, left, top, width):
@@ -72,7 +72,7 @@ class IlludGUI(object):
         for char in text:
             i = ord(char)
             if(char == '\t'):
-                res.append('->  ')
+                res.append('>  ')
             elif(i < 32 or i > 126):
                 res.append('<{}>'.format(hex(i)[2:]))
             else:
@@ -167,7 +167,7 @@ class IlludGUI(object):
                     gutter = '{} '.format(lineNum + 1).rjust(gutterWidth)
                 else:
                     gutter = ' ' * gutterWidth
-                self.screen.addstr(currentY, left, gutter, curses.A_REVERSE)
+                self.screen.addstr(currentY, left, gutter, curses.A_BOLD)
                 self.screen.addstr(currentY, left + len(gutter), wrappedLine)
                 currentY += 1
                 
