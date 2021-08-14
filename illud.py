@@ -186,3 +186,39 @@ class IlludGUI(object):
         self.drawText(0, 0, width, height - 1)
         self.screen.refresh()
 
+    def handleNormalMode(self, char):
+        if char == ord('q'): # quit
+            self.exitEditor = True
+        elif char == ord('k'): # down
+            self.row += 1
+        elif char == ord('i'): # up
+            self.row -= 1
+        elif char == ord('j'): # left
+            self.col -= 1
+        elif char == ord('l'): # right
+            self.col += 1
+        elif char == ord('s'): # move to beginning of line
+            self.col = 0
+        elif char == ord('e'): # move to end of line
+            currentLineLen = len(self.buf.getLines()[self.row])
+            self.col = currentLineLen - 1
+        elif char == ord('x'): # delete a character
+            self.buf.setText(self.row, self.col, self.row,
+                                self.col + 1, '')
+        elif char == ord('i'): # enter insert mode
+            self.mode = "Insert"
+        elif char == ord('a'): # enter insert mode after cursor
+            self.mode = "Insert"
+            self.col += 1
+        elif char == ord('w'): # write file
+            if self.fileName == None:
+                self.message = "Can\'t write file without filename."
+            else:
+                try:
+                    with open(self.fileName, 'w') as f:
+                        f.write('\n'.join(self.buf.getLines()))
+                except IOError as e:
+                    self.message = ("Failed to write file \'{}\': {}"
+                                     .format(self.fileName, e))
+        else:
+            self.message = ''
