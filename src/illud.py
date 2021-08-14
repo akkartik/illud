@@ -40,7 +40,7 @@ class IlludGUI(object):
         self.row = 0
         self.col = 0
         self.scrollTop = 0
-        self.mode = 'Normal'
+        self.mode = 'Navigation'
         self.message = 'Illud'
         self.exitEditor = False
 
@@ -186,7 +186,7 @@ class IlludGUI(object):
         self.drawText(0, 0, width, height - 1)
         self.screen.refresh()
 
-    def handleNormalMode(self, char):
+    def handleNavigationMode(self, char):
         if(char == ord('q')): # quit
             self.exitEditor = True
         elif(char == ord('k')): # down
@@ -227,7 +227,7 @@ class IlludGUI(object):
         if(char == 27): #ESC
             if(self.mode == 'Insert'):
                 self.col -= 1
-            self.mode = "Normal"
+            self.mode = "Navigation"
         elif(char == 127): # Backspace
             if(self.col == 0 and self.row == 0):
                 pass
@@ -258,8 +258,8 @@ class IlludGUI(object):
             self.message = ''
 
             char = self.screen.getch()
-            if(self.mode == 'Normal'):
-                self.handleNormalMode(char)
+            if(self.mode == 'Navigation'):
+                self.handleNavigationMode(char)
             elif(self.mode == 'Insert'):
                 self.handleInsertMode(char)
 
