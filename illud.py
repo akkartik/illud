@@ -253,3 +253,23 @@ class IlludGUI(object):
                 self.col = 0
             else:
                 self.col += 1
+
+    def main(self):
+        while not self.exitEditor:
+            self.draw()
+            self.message = ''
+
+            char = self.screen.getch()
+            if(self.mode == 'Normal'):
+                self.handleNormalMode(char)
+            elif(self.mode == 'Insert'):
+                self.insertMode(char)
+
+            numLines = len(self.buf.getLines())
+            self.row = min(numLines - 1, max(0, self.row))
+            numCols = max(1, len(self.buf.getLines()[self.row]))
+            
+            if(self.mode == 'Insert'):
+                numCols += 1
+            self.col = min(numCols - 1, max(0, self.col))
+
