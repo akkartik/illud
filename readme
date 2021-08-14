@@ -20,4 +20,9 @@ Usage:
 Compatibility:
 	- GNU/Linux: It works out of the box. Just clone the repository and run it.
 	- macOS: I didn't test it on macOS, but since it is a unix-like OS, it also should work out of the box.
-	- Windows: Install 'windows-curses' through 'pip' and everything will work. 
+	- Windows: Install 'windows-curses' through 'pip' and everything will work.
+
+TODO:
+	- Syntax highlighting.
+	- Jump to line.
+	- Handle other keypresses so it doesn't print stuff like '<19a>'. 
