@@ -60,7 +60,7 @@ class IlludGUI(object):
         return gutterWidth
 
     def drawStatusLine(self, left, top, width):
-        mode = '{} - {}'.format(self.message, self.mode).ljust(width - 1)
+        mode = 'Illud - {}'.format(self.mode).ljust(width - 1)
         self.screen.addstr(top, left, mode, curses.A_BOLD)
         position = '{}:{}'.format(self.row + 1, self.col + 1)
         self.screen.addstr(top, left + width - 1 - len(position),
