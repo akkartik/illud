@@ -74,7 +74,7 @@ class IlludGUI(object):
             if(char == '\t'):
                 res.append('>')
             elif(i < 32 or i > 126):
-                res.append('<{}>'.format(hex(i)[2:]))
+            	res.append('<{}>'.format(hex(i)[2:]))
             else:
                 res.append(char)
         return ''.join(res)
@@ -230,7 +230,7 @@ class IlludGUI(object):
             if(self.mode == 'Insert'):
                 self.col -= 1
             self.mode = "Navigation"
-        elif(char == 127 or char == 8 or char == 51): # Backspace
+        elif(char == 127 or char == 8): # Backspace
             if(self.col == 0 and self.row == 0):
                 pass
             
