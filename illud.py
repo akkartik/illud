@@ -59,3 +59,65 @@ class IlludGUI(object):
             self.screen.addstr(y, 0, text, curses.A_REVERSE)
         return gutterWidth
 
+    def drawStatusLine(self, left, top, width):
+        mode = '{} - {}'.format(self.message, self.mode).ljust(width - 1)
+        self.screen.addstr(top, left, mode, curses.A_BOLD)
+        position = '{}:{}'.format(self.row + 1, self.col + 1)
+        self.screen.addstr(top, left + width - 1 - len(position),
+                           position, curses.A_BOLD)
+
+    def drawText(self, left, top, width, height):
+        highestLineNum = len(self.buf.getLines())
+        gutterWidth = max(3, len(str(highestLineNum))) + 1
+        lineWidth = width - gutterWidth
+        cursorY, cursorX = None, None
+
+        self.scrollTo(self.row, lineWidth, height)
+
+        lineNums = range(self.scrollTop, highestLineNum)
+        currentY = top
+        trailingChar = '.'
+
+        for lineNum in lineNums:
+            remainingRows = top + height - currentY
+
+            if(remainingRows == 0):
+                break
+            wrappedLines = self.getWrappedLines(lineNum, lineWidth)
+            if(len(wrappedLines) > remainingRows):
+                trailing_char = '>'
+                break
+            
+            if(lineNum == self.row):
+                lines = self.getWrappedLines(lineNum, lineWidth,
+                                                convertNonPrinting=False)
+                realCol = len(self.convertNonPrinting(
+                    ''.join(lines)[:self.col])
+                )
+                cursorY = curY + realCol / lineWidth
+                cursorX = left + gutterWidth + realCol % lineWidth
+                
+            for n, wrappedLine in enumerate(wrappedLines):
+                if(n == 0):
+                    gutter = '{} '.format(lineNum + 1).rjust(gutterWidth)
+                else:
+                    gutter = ' ' * gutterWidth
+                self.screen.addstr(currentY, left, gutter, curses.A_REVERSE)
+                self.screen.addstr(currentY, left + len(gutter), wrappedLine)
+                currentY += 1
+                
+        for currentY in range(currentY, top + height):
+            gutter = trailingChar.ljust(gutterWidth)
+            self.screen.addstr(currentY, left, gutter)
+
+        assert cursorX != None and cursorY != None
+        self.screen.move(cursorY + 0, cursorX + 0)
+
+    def draw(self):
+        self.screen.erase()
+        height = self.screen.getmaxyx()[0]
+        width = self.screen.getmaxyx()[1]
+        self.drawStatusLine(0, height - 1, width)
+        self.drawText(0, 0, width, height - 1)
+        self.screen.refresh()
+
