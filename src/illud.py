@@ -187,11 +187,8 @@ class IlludGUI(object):
         self.screen.refresh()
 
     def handleNavigationMode(self, char):
-	"""
-	Unfortunately, this python version still does not have
-	switch/case support, so I have to use all those elif's...
-	"""
-
+        """Unfortunately, this python version still does not have switch/case support, so I have to use all those elif's..."""
+        
         if(char == ord('q')): # quit
             self.exitEditor = True
         elif(char == ord('k')): # down
