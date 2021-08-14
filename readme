@@ -1,0 +1,18 @@
+Illud is a minimalist terminal text editor.
+
+Features:
+	- Insert mode.
+	- Navigation mode.
+	- Text wrapper.
+	- Tab indication.
+
+Usage:
+	- ESC: Navigation mode.
+	- i: Up.
+	- k: Down.
+	- j: Left.
+	- l: Right.
+	- s: Beginning of the line.
+	- e: End of the line.
+	- w: Write file.
+	- f: Insert Mode.
