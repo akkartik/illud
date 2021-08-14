@@ -66,6 +66,38 @@ class IlludGUI(object):
         self.screen.addstr(top, left + width - 1 - len(position),
                            position, curses.A_BOLD)
 
+    @staticmethod
+    def convertNonPrinting(text):
+        res = []
+        for char in text:
+            i = ord(char)
+            if(char == '\t'):
+                res.append('->  ')
+            elif(i < 32 or i > 126):
+                res.append('<{}>'.format(hex(i)[2:]))
+            else:
+                res.append(char)
+        return ''.join(res)
+    
+    def getWrappedLines(self, lineNum, width, convertNonPrinting=True):
+        def wrapText(text, width):
+            if(text == ''):
+                yield ''
+            else:
+                for i in xrange(0, len(text), width):
+                    yield text[i:i + width]
+
+        assert lineNum >= 0, 'lineNum must be greater than 0.'
+        
+        line = self.buf.getLines()[lineNum]
+        
+        if(convertNonPrinting):
+            line = self.convertNonPrinting(line)
+        return list(wrapText(line, width))
+
+    def getNumWrappedLines(self, lineNum, width):
+        return len(self.getWrappedLines(lineNum, width))
+
     def drawText(self, left, top, width, height):
         highestLineNum = len(self.buf.getLines())
         gutterWidth = max(3, len(str(highestLineNum))) + 1
