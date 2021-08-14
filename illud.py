@@ -98,6 +98,39 @@ class IlludGUI(object):
     def getNumWrappedLines(self, lineNum, width):
         return len(self.getWrappedLines(lineNum, width))
 
+    def scrollBottomToTop(self, bottom, width, height):
+        def verify(top):
+            rows = [list(self.getWrappedLines(n, width))
+                    for n in range(top, bottom + 1)]
+            numRows = sum(len(r) for r in rows)
+
+            assert top <= bottom, ('top line {} may not be below bottom {}'
+                                   .format(top, bottom))
+
+            assert numRows <= height, (
+                '{} {} {} {} {}'
+                .format(numRows, top, bottom, height, rows))
+
+        top, nextTop = bottom, bottom
+        
+        distance = self.getNumWrappedLines(bottom, width)
+
+        while nextTop >= 0 and distance <= height:
+            top = nextTop
+            nextTop -= 1
+            distance += self.getNumWrappedLines(max(0, nextTop), width)
+
+        verify(top)
+        return top
+
+    def scrollTo(self, lineNum, width, rowHeight):
+        lowestTop = self.scrollBottomToTop(lineNum, width, rowHeight)
+
+        if(lineNum < self.scrollTop):
+            self.scrollTop = lineNum
+        elif(self.scrollTop < lowestTop):
+            self.scrollTop = lowestTop
+    
     def drawText(self, left, top, width, height):
         highestLineNum = len(self.buf.getLines())
         gutterWidth = max(3, len(str(highestLineNum))) + 1
