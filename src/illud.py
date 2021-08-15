@@ -60,7 +60,7 @@ class IlludGUI(object):
         for char in text:
             i = ord(char)
             if(char == '\t'):
-                res.append('>   ')
+                res.append('|   ')
             elif(i < 32 or i > 126):
             	res.append('<{}>'.format(hex(i)[2:]))
             else:
@@ -207,6 +207,7 @@ class IlludGUI(object):
                 try:
                     with open(self.fileName, 'w') as f:
                         f.write('\n'.join(self.buf.getLines()))
+                        self.message = "{} saved successfully!".format(self.fileName)
                 except IOError as e:
                     self.message = ("Failed to write file \'{}\': {}"
                                      .format(self.fileName, e))
