@@ -16,6 +16,8 @@ Usage:
 	- e: End of the line.
 	- w: Write file.
 	- f: Insert Mode.
+	- a: Insert Mode (starting after cursor).
+	- x: Delete character.
 
 Compatibility:
 	- GNU/Linux and macOS:
