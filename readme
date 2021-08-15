@@ -18,9 +18,13 @@ Usage:
 	- f: Insert Mode.
 
 Compatibility:
-	- GNU/Linux: It works out of the box. Just clone the repository and run it.
-	- macOS: I didn't test it on macOS, but since it is a unix-like OS, it also should work out of the box.
-	- Windows: Install 'windows-curses' through 'pip' and everything will work.
+	- GNU/Linux and macOS:
+		$ pip install curses
+		$ python3 illud.py
+
+	- Windows:
+		$ pip install windows-curses
+		$ python3 illud.py
 
 TODO:
 	- Syntax highlighting.
