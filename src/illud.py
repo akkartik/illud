@@ -183,6 +183,8 @@ class IlludGUI(object):
             self.row += 1
         elif(char == ord('i')): # up
             self.row -= 1
+        elif(char == ord('g')): # jump to line
+            self.jumpToLineWidget()
         elif(char == ord('j')): # left
             self.col -= 1
         elif(char == ord('l')): # right
@@ -261,6 +263,18 @@ class IlludGUI(object):
             if(self.mode == 'Insert'):
                 numCols += 1
             self.col = min(numCols - 1, max(0, self.col))
+
+    def jumpToLineWidget(self):
+        self.screen.addstr(0, 0, " " * (curses.COLS-1))
+        MAX_DIGITS = 5
+        self.screen.addstr(0, 0, "line: ", curses.A_REVERSE)
+        curses.echo()
+        digits = self.screen.getstr(0, len("line: "), MAX_DIGITS)
+        curses.noecho()
+        try:
+            self.row = int(digits) - 1
+        except ValueError:
+            pass  # on illegal values, do nothing. Currently the only way to cancel.
 
 @contextmanager
 def useCurses():
