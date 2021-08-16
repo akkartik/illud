@@ -174,6 +174,32 @@ class IlludGUI(object):
         self.drawText(0, 0, width, height - 1)
         self.screen.refresh()
 
+    def nextWord(self):
+        line = self.buf.getLines()[self.row]
+        # skip to space
+        while self.col < len(line):
+            if(line[self.col].isspace()):
+                break
+            self.col += 1
+        # skip to non-space
+        while self.col < len(line):
+            if(not line[self.col].isspace()):
+                break
+            self.col += 1
+
+    def previousWord(self):
+        line = self.buf.getLines()[self.row]
+        # skip to space
+        while self.col >= 0:
+            if(line[self.col].isspace()):
+                break
+            self.col -= 1
+        # skip to non-space
+        while self.col < len(line):
+            if(not line[self.col].isspace()):
+                break
+            self.col -= 1
+
     def handleNavigationMode(self, char):
         """Unfortunately, this python version still does not have switch/case support, so I have to use all those elif's..."""
         
@@ -192,6 +218,10 @@ class IlludGUI(object):
         elif(char == ord('e')): # move to end of line
             currentLineLen = len(self.buf.getLines()[self.row])
             self.col = currentLineLen - 1
+        elif(char == ord('o')): # move to start of next word
+            self.nextWord()
+        elif(char == ord('u')): # move to end of previous word
+            self.previousWord()
         elif(char == ord('x')): # delete a character
             self.buf.setText(self.row, self.col, self.row,
                                 self.col + 1, '')
